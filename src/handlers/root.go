@@ -14,7 +14,7 @@ type Response struct {
 func RootHandler(w http.ResponseWriter, r *http.Request) {
 	// Create a response object
 	response := Response{
-		Message: "Hello, world2!",
+		Message: "Hello, world!",
 	}
 
 	// Convert the response object to JSON
