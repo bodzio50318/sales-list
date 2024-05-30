@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Open folder
-      run: cd /home/bodzio/sales-list
-      
+      run: cd ~/home/bodzio/sales-list
+
     - name: Pull
       run: git pull
 
