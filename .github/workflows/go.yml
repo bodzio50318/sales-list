@@ -15,5 +15,5 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Build
-      run: go build -v ./... -o bin/sales
+      run: go build -o bin/sales
 
