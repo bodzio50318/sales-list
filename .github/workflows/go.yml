@@ -12,14 +12,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Open folder
-      run: cd ../bodzio/sales-list
-
-    - name: Pull
-      run: git pull
-
+    - uses: actions/checkout@v4
+    
     - name: Build
-      run: go build -o bin/sales
+      run: go build -o /home/bodzio/buildOut/sales
 
     - name: Run
       run: go run .
