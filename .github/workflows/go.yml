@@ -14,6 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
+    - name: Create output directory
+      run: mkdir -p /home/bodzio/buildOut/
+
     - name: Build
       run: go build -o /home/bodzio/buildOut/sales
 
