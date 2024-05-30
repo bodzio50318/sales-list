@@ -17,6 +17,6 @@ jobs:
     - name: Build
       run: go build -o /home/bodzio/buildOut/sales
 
-    - name: Run
+    - name: Ru
       run: go run .
 
