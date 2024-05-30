@@ -12,11 +12,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Pwd
-      run: pwd  
-    - name: Ls
-      run: ls -a
     - uses: actions/checkout@v4
+      with:
+        path: /home/bodzio
 
     - name: Build
       run: go build -o bin/sales
