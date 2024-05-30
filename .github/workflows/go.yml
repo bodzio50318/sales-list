@@ -12,6 +12,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Pwd
+      run: pwd  
+    - name: Ls
+      run: ls -a
     - uses: actions/checkout@v4
 
     - name: Build
