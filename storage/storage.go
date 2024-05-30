@@ -83,9 +83,6 @@ func NewPostgressStore() *PostgressStore {
 		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
 
-	log.Println("User: ", user)
-	log.Println("Password: ", password)
-
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
 		panic(err)

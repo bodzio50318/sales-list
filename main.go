@@ -8,7 +8,7 @@ import (
 
 func main() {
 	storage := storage.NewPostgressStore()
-	server := api.NewApiServer("localhost:3000", storage)
+	server := api.NewApiServer("localhost:8080", storage)
 	server.Run()
 	log.Println("Server started!")
 }
