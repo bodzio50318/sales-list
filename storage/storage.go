@@ -76,6 +76,8 @@ func createItemTable(db *sql.DB) {
 
 func NewPostgressStore() *PostgressStore {
 	host := os.Getenv("db_host")
+
+	log.Println("Db Host is: ", host)
 	user := os.Getenv("postgressUser")
 	password := os.Getenv("postgressPassword")
 
