@@ -10,7 +10,6 @@ import (
 )
 
 const (
-	host   = "127.0.0.1"
 	port   = 5432
 	dbname = "saleslist"
 )
@@ -76,6 +75,7 @@ func createItemTable(db *sql.DB) {
 }
 
 func NewPostgressStore() *PostgressStore {
+	host := "host.docker.internal"
 	user := os.Getenv("postgressUser")
 	password := os.Getenv("postgressPassword")
 
