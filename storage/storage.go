@@ -75,7 +75,7 @@ func createItemTable(db *sql.DB) {
 }
 
 func NewPostgressStore() *PostgressStore {
-	host := "host.docker.internal"
+	host := os.Getenv("db_host")
 	user := os.Getenv("postgressUser")
 	password := os.Getenv("postgressPassword")
 
