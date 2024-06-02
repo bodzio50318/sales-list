@@ -17,6 +17,8 @@ const (
 type Storage interface {
 	Init()
 	GetItems() ([]Item, error)
+	GetUserByName(string) (*User, error)
+	SetUserPassword(int, string) error
 	// GetItemById(int) (*Item, error)
 	// CreateItem(*Item) error
 	// DeleteAccount(int) error
@@ -37,8 +39,6 @@ func (store *PostgressStore) GetItems() ([]Item, error) {
 
 	var items []Item
 
-	log.Println("Result: ", rows)
-
 	for rows.Next() {
 		var item Item
 		if err := rows.Scan(&item.Id, &item.Name); err != nil {
@@ -51,27 +51,6 @@ func (store *PostgressStore) GetItems() ([]Item, error) {
 		return nil, err
 	}
 	return items, nil
-}
-
-func (store *PostgressStore) Init() {
-	createItemTable(store.db)
-}
-
-func createItemTable(db *sql.DB) {
-	query := `
-        CREATE TABLE IF NOT EXISTS items (
-            id SERIAL PRIMARY KEY,
-            name TEXT NOT NULL
-        );`
-
-	result, err := db.Exec(query)
-
-	if err != nil {
-		log.Panic(err)
-	}
-
-	log.Println("Creating item table: ", result)
-
 }
 
 func NewPostgressStore() *PostgressStore {
