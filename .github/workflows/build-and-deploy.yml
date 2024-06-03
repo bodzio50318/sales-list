@@ -42,6 +42,4 @@ jobs:
             # Remove old container
             docker rm $(echo $IMAGE_NAME)
             # Run a new container from a new image
-            docker run -d --network="host" -e db_host=127.0.0.1 -e postgressUser=${{ secrets.DB_USER }} -e postgressPassword=${{ secrets.DB_PASSWORD }} -e JWT_KEY= ${{ secrets.JWT_KEY }} \
-            --restart always \
-            --name $(echo $IMAGE_NAME)
+            docker run -d --network="host" -e db_host=127.0.0.1 -e postgressUser=${{ secrets.DB_USER }} -e postgressPassword=${{ secrets.DB_PASSWORD }} -e JWT_KEY= ${{ secrets.JWT_KEY }} $(echo $IMAGE_NAME)
