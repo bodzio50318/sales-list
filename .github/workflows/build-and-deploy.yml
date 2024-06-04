@@ -36,13 +36,12 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }} 
           envs: DB_PORT DB_USER DB_PASSWORD DB_NAME
           script: |
-          # Pull changes
-          unset DOCKER_DEFAULT_PLATFORM
-          cd ~/sales-list
-          git pull
-          docker-compose down
-          docker compose build
-          docker compose up -d
+            unset DOCKER_DEFAULT_PLATFORM
+            cd ~/sales-list
+            git pull
+            docker-compose down
+            docker compose build
+            docker compose up -d
     
         
 
