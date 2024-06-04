@@ -8,7 +8,7 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o /sales
+RUN go build -x -o /sales
 
 EXPOSE 8080
 
