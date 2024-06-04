@@ -5,13 +5,9 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	_ "github.com/lib/pq"
-)
-
-const (
-	port   = 5432
-	dbname = "saleslist"
 )
 
 type Storage interface {
@@ -28,41 +24,25 @@ type PostgressStore struct {
 	db *sql.DB
 }
 
-func (store *PostgressStore) GetItems() ([]Item, error) {
-	query := "SELECT id, name FROM items"
-
-	rows, err := store.db.Query(query)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var items []Item
-
-	for rows.Next() {
-		var item Item
-		if err := rows.Scan(&item.Id, &item.Name); err != nil {
-			return nil, err
-		}
-		items = append(items, item)
-	}
-
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
+var DB_HOST = os.Getenv("DB_HOST")
+var DB_USER = os.Getenv("DB_USER")
+var DB_PASSWORD = os.Getenv("DB_PASSWORD")
+var DB_PORT = os.Getenv("DB_PORT")
+var DB_NAME = os.Getenv("DB_NAME")
 
 func NewPostgressStore() *PostgressStore {
-	host := os.Getenv("db_host")
 
-	log.Println("Db Host is: ", host)
-	user := os.Getenv("postgressUser")
-	password := os.Getenv("postgressPassword")
+	log.Println("Db Host is: ", DB_HOST)
+
+	intPort, err := strconv.Atoi(DB_PORT)
+
+	if err != nil {
+		panic(err)
+	}
 
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
+		DB_HOST, intPort, DB_USER, DB_PASSWORD, DB_NAME)
 
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {

@@ -1,6 +1,9 @@
 package storage
 
-import "log"
+import (
+	"fmt"
+	"log"
+)
 
 func (store *PostgressStore) SetUserPassword(id int, hashedPassword string) error {
 	query := "UPDATE users SET hashedpassword = $1 WHERE id = $2"
@@ -24,4 +27,37 @@ func (store *PostgressStore) GetUserByName(name string) (*User, error) {
 	}
 
 	return &user, nil
+}
+
+func (store *PostgressStore) InsertUser(name string) error {
+	query := "INSERT INTO users (name) VALUES ($1) RETURNING id"
+
+	row := store.db.QueryRow(query, name)
+
+	fmt.Println("Row: ", row)
+	return nil
+}
+
+func (store *PostgressStore) GetUserList() ([]User, error) {
+	query := "SELECT id, name FROM users"
+
+	rows, err := store.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []User
+	for rows.Next() {
+		var user User
+		if err := rows.Scan(&user.Id, &user.Name); err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return users, nil
 }

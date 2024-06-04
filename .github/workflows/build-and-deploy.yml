@@ -25,21 +25,20 @@ jobs:
       - name: Deploy to Digital Ocean droplet via SSH action
         uses: appleboy/ssh-action@v0.1.4
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }} 
-          envs: IMAGE_NAME,GITHUB_SHA
-          script: |
-            # Pull changes
-            unset DOCKER_DEFAULT_PLATFORM
-            cd ~/sales-list
-            git pull
-            # Build image
-            docker build -t $(echo $IMAGE_NAME) .
-            # Stop running container
-            docker stop $(echo $IMAGE_NAME)
-            # Remove old container
-            docker rm $(echo $IMAGE_NAME)
-            # Run a new container from a new image
-            docker run -d --network="host" -e db_host=127.0.0.1 -e postgressUser=${{ secrets.DB_USER }} -e postgressPassword=${{ secrets.DB_PASSWORD }} -e JWT_KEY= ${{ secrets.JWT_KEY }} $(echo $IMAGE_NAME)
+          context: .
+          tags: user/app:latest
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+        script: |
+          # Pull changes
+          unset DOCKER_DEFAULT_PLATFORM
+          cd ~/sales-list
+          git pull
+          docker-compose down
+          docker compose build
+          docker compose up -d
+

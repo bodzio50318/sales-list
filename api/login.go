@@ -25,7 +25,12 @@ func (s *ApiServer) handleLogin(w http.ResponseWriter, r *http.Request) error {
 			if err != nil {
 				return fmt.Errorf("error logging")
 			}
-			return nil
+			jwtToken, err := GenerateJWT(strconv.Itoa(user.Id))
+			if err != nil {
+				log.Println(err.Error())
+				return fmt.Errorf("error logging")
+			}
+			return WriteJson(w, http.StatusAccepted, jwtRespone{UserName: user.Name, JwtToken: jwtToken})
 		}
 		log.Println("Checking password")
 		if CheckPasswordHash(body.Password, user.HashedPassword.String) {
