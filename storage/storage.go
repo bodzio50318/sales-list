@@ -13,6 +13,7 @@ import (
 type Storage interface {
 	Init()
 	GetItems() ([]Item, error)
+	InsertItem(itemName string) (*Item, error)
 	GetUserByName(string) (*User, error)
 	SetUserPassword(int, string) error
 	// GetItemById(int) (*Item, error)

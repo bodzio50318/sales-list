@@ -9,7 +9,7 @@ import (
 
 func (s *ApiServer) handleLogin(w http.ResponseWriter, r *http.Request) error {
 	if r.Method == http.MethodPost {
-		body, err := mapRequestBody[loginBody](r)
+		body, err := mapRequestBody[LoginBody](r)
 		if err != nil {
 			log.Printf("Error reading body: %v", err)
 			return fmt.Errorf("error logging")
@@ -30,7 +30,7 @@ func (s *ApiServer) handleLogin(w http.ResponseWriter, r *http.Request) error {
 				log.Println(err.Error())
 				return fmt.Errorf("error logging")
 			}
-			return WriteJson(w, http.StatusAccepted, jwtRespone{UserName: user.Name, JwtToken: jwtToken})
+			return WriteJson(w, http.StatusAccepted, JwtRespone{UserName: user.Name, JwtToken: jwtToken})
 		}
 		log.Println("Checking password")
 		if CheckPasswordHash(body.Password, user.HashedPassword.String) {
@@ -41,7 +41,7 @@ func (s *ApiServer) handleLogin(w http.ResponseWriter, r *http.Request) error {
 				log.Println(err.Error())
 				return fmt.Errorf("error logging")
 			}
-			return WriteJson(w, http.StatusAccepted, jwtRespone{UserName: user.Name, JwtToken: jwtToken})
+			return WriteJson(w, http.StatusAccepted, JwtRespone{UserName: user.Name, JwtToken: jwtToken})
 		}
 
 		return fmt.Errorf("error logging")
@@ -49,7 +49,7 @@ func (s *ApiServer) handleLogin(w http.ResponseWriter, r *http.Request) error {
 	return fmt.Errorf("method not supported")
 }
 
-func (s *ApiServer) createFirstPassword(body loginBody, userId int) error {
+func (s *ApiServer) createFirstPassword(body LoginBody, userId int) error {
 	log.Println("First login setting up password")
 	hashedPassword, err := HashPassword(body.Password)
 	if err != nil {
