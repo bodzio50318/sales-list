@@ -56,7 +56,7 @@ func createItemTable(db *sql.DB) {
 	query := `
         CREATE TABLE IF NOT EXISTS items (
             id SERIAL PRIMARY KEY,
-            name TEXT NOT NULL
+            name TEXT NOT NULL UNIQUE
         );`
 
 	result, err := db.Exec(query)

@@ -1,7 +1,5 @@
 package storage
 
-import "fmt"
-
 func (store *PostgressStore) GetItems() ([]Item, error) {
 	query := "SELECT id, name FROM items"
 
@@ -31,7 +29,8 @@ func (store *PostgressStore) InsertItem(itemName string) error {
 	query := "INSERT INTO items (name) VALUES ($1) RETURNING id"
 
 	row := store.db.QueryRow(query, itemName)
-
-	fmt.Println("Row: ", row)
+	if row.Err() != nil {
+		return row.Err()
+	}
 	return nil
 }

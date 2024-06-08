@@ -1,0 +1,36 @@
+{{ block "itemPage" . }}
+<html>
+
+<head>
+    <title>Items list</title>
+    <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
+</head>
+
+<body>
+    {{template "itemForm" . }}
+    <hr>
+    {{template "listOfItems" . }}
+</body>
+
+</html>
+{{ end }}
+
+{{ block "itemForm" . }}
+<form hx-swap="outerHTML" hx-target="#listOfItems" hx-post="/item">
+    {{ if .Values.name }} value="{{.Values.name}}" {{ end }}
+    name: <input type="text" name="name" />
+    {{ if .Errors.name }} <span style="color: red">{{.Errors.name}}</span> {{ end }}
+    <button type="submit">Create item</button>
+</form>
+{{ end }}
+
+{{block "listOfItems" .}}
+<div id="listOfItems" style="display: flex;flex-direction: column">
+    {{range .}}
+    <div>
+        Id: <span>{{.Id}}</span>
+        Name: <span>{{.Name}}</span>
+    </div>
+    {{ end }}
+</div>
+{{ end }}

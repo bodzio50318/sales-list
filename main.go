@@ -5,11 +5,15 @@ import (
 	"github/bodzio50318/saleslist/storage"
 	"log"
 	"os"
+
+	_ "github.com/joho/godotenv/autoload"
 )
 
 func main() {
+
 	storage := storage.NewPostgressStore()
 	path := os.Getenv("salesPath")
+
 	log.Println("Os path:", path)
 	if path == "" {
 		path = "0.0.0.0:8080"

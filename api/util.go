@@ -61,6 +61,7 @@ func GenerateJWT(userID string) (string, error) {
 
 	return tokenString, nil
 }
+
 func ValidateJWT(tokenString string) (string, error) {
 	claims := &jwt.StandardClaims{}
 	jwtKey := []byte(os.Getenv("JWT_KEY"))
