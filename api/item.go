@@ -14,25 +14,28 @@ func (s *ApiServer) handleGetItems(c echo.Context) error {
 	}
 
 	log.Println("items", items)
-	return c.Render(http.StatusOK, "itemPage", items)
+	itemsPageData := newItemsPageData()
+
+	itemsPageData.Items = items
+	return c.Render(http.StatusOK, "itemPage", itemsPageData)
 }
 
 func (s *ApiServer) handlePostItems(c echo.Context) error {
+
 	name := c.FormValue("name")
-	err := s.store.InsertItem(name)
+
+	formData := newItemFormData()
+	formData.Values["name"] = name
+
+	item, err := s.store.InsertItem(name)
 
 	if err != nil {
-		formData := newItemFormData()
+		log.Println("Failed to insert item", err)
 		formData.Errors["name"] = "Failed to insert item"
-		formData.Values["name"] = name
-		return c.Render(http.StatusBadRequest, "itemForm", formData)
+		return c.Render(http.StatusUnprocessableEntity, "itemForm", formData)
 	}
-
-	items, err := s.store.GetItems()
-	if err != nil {
-		return err
-	}
-	return c.Render(http.StatusOK, "listOfItems", items)
+	c.Render(http.StatusOK, "itemForm", newItemFormData())
+	return c.Render(http.StatusOK, "oob-item", item)
 }
 
 func (s *ApiServer) handleAddItem(w http.ResponseWriter, r *http.Request) error {

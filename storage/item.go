@@ -25,12 +25,17 @@ func (store *PostgressStore) GetItems() ([]Item, error) {
 	return items, nil
 }
 
-func (store *PostgressStore) InsertItem(itemName string) error {
-	query := "INSERT INTO items (name) VALUES ($1) RETURNING id"
+func (store *PostgressStore) InsertItem(itemName string) (*Item, error) {
+	query := "INSERT INTO items (name) VALUES ($1) RETURNING id,name"
 
 	row := store.db.QueryRow(query, itemName)
 	if row.Err() != nil {
-		return row.Err()
+		return nil, row.Err()
 	}
-	return nil
+	var item Item
+	if err := row.Scan(&item.Id, &item.Name); err != nil {
+		println("Error scanning row", err)
+		return nil, err
+	}
+	return &item, nil
 }

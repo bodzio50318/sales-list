@@ -4,21 +4,30 @@
 <head>
     <title>Items list</title>
     <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", (event) => {
+            document.body.addEventListener('htmx:beforeSwap', function (event) {
+                if (event.detail.xhr.status === 422) {
+                    event.detail.shouldSwap = true;
+                    event.detail.isError = false;
+                }
+            });
+        });
+    </script>
 </head>
 
 <body>
-    {{template "itemForm" . }}
+    {{template "itemForm" .FormData }}
     <hr>
-    {{template "listOfItems" . }}
+    {{template "listOfItems" .Items }}
 </body>
 
 </html>
 {{ end }}
 
 {{ block "itemForm" . }}
-<form hx-swap="outerHTML" hx-target="#listOfItems" hx-post="/item">
-    {{ if .Values.name }} value="{{.Values.name}}" {{ end }}
-    name: <input type="text" name="name" />
+<form hx-swap="outerHTML" hx-post="/item">
+    name: <input {{ if .Values.name }} value="{{.Values.name}}" {{ end }} type="text" name="name" />
     {{ if .Errors.name }} <span style="color: red">{{.Errors.name}}</span> {{ end }}
     <button type="submit">Create item</button>
 </form>
@@ -27,10 +36,20 @@
 {{block "listOfItems" .}}
 <div id="listOfItems" style="display: flex;flex-direction: column">
     {{range .}}
-    <div>
-        Id: <span>{{.Id}}</span>
-        Name: <span>{{.Name}}</span>
-    </div>
+        {{template "item" . }}
     {{ end }}
 </div>
 {{ end }}
+
+{{block "item" .}}
+<div>
+    Id: <span>{{.Id}}</span>
+    Name: <span>{{.Name}}</span>
+</div>
+{{end}}
+
+{{block "oob-item" .}}
+<div id="listOfItems"  hx-swap-oob="afterbegin" >
+    {{template "item" . }}
+</div>
+{{end}}
